@@ -29,7 +29,10 @@ export default class Carousel extends Component {
         sneak: PropTypes.number,
         transitionDelay: PropTypes.number,
         currentPage: PropTypes.number,
-        swipeThreshold: PropTypes.number
+        swipeThreshold: PropTypes.number,
+        indicators: PropTypes.bool,
+        indicatorSize: PropTypes.number,
+        indicatorColor: PropTypes.string
     };
 
     static defaultProps = {
@@ -41,7 +44,10 @@ export default class Carousel extends Component {
         noItemsText: "Sorry, there are currently \n no items available",
         transitionDelay: 0,
         currentPage: 0,
-        swipeThreshold: 0.5
+        swipeThreshold: 0.5,
+        indicators: false,
+        indicatorSize: 10,
+        indicatorColor: '#000000'
     };
 
     constructor(props) {
@@ -214,6 +220,32 @@ export default class Carousel extends Component {
         else {
             const children = Array.isArray(this.props.children) ? this.props.children : [this.props.children]
             body = children.map((c, index) => {
+                if (this.props.indicators) {
+                    var indicatorStyle = [styles.indicator];
+                    
+                    indicatorStyle.push({
+                        width: this.props.indicatorSize - (this.props.indicatorSize > 10 ? 2 : 1), 
+                        height: this.props.indicatorSize - (this.props.indicatorSize > 10 ? 2 : 1), 
+                        borderRadius: this.props.indicatorSize/2,
+                        borderColor: this.props.indicatorColor
+                    });
+
+                    if (this.state.currentPage == index) {
+                        indicatorStyle.push({
+                            backgroundColor: this.props.indicatorColor
+                        });
+                    }
+
+                    indicator.push(
+                        <TouchableWithoutFeedback
+                            key={ index }
+                            onPress={ () => this.setState({currentPage: index}) }
+                        >
+                            <View style={ indicatorStyle }></View>
+                        </TouchableWithoutFeedback>
+                    );
+                }
+              
                 return (
                     <TouchableWithoutFeedback
                         key={ index }
@@ -243,6 +275,9 @@ export default class Carousel extends Component {
                 >
                     { body }
                 </ScrollView>
+                <View style={this.props.indicators ? styles.indicatorContainer : []}>
+                  {indicator}
+                </View>
             </View>
         );
     }

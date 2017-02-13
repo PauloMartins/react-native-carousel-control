@@ -7,6 +7,16 @@ let styles = StyleSheet.create({
     },
     page: {
         flex: 1
+    },
+    indicatorContainer: {
+    	justifyContent: 'center', 
+    	flexDirection: 'row', 
+    	padding: 10
+    },
+    indicator: {
+    	borderWidth: 1, 
+    	marginLeft: 5, 
+    	marginRight: 5
     }
 });
 
